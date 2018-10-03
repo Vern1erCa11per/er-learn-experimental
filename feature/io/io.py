@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 
 from sklearn.externals import joblib
@@ -6,6 +7,8 @@ from sklearn.pipeline import Pipeline
 from feature.pipelines import ConcatPipeline
 import scipy.sparse as sparse
 import numpy as np
+
+loggger = logging.getLogger(__name__)
 
 class FeatureWriter(object):
 
@@ -35,8 +38,8 @@ class FeatureWriter(object):
         elif isinstance(feature_x, np.ndarray):
             np.savez_compressed(file_path.with_suffix(".npz"), feature_x)
         elif isinstance(feature_x, list):
-            joblib.dump(feature_x,file_path.with_suffix(".joblib.dump"), compress=3)
+            filename = file_path.with_suffix(".joblib.dump")
+            loggger.info("writing feature into {}".format(filename))
+            joblib.dump(feature_x, filename, compress=3)
         else:
             raise TypeError("unsupported feature type")
-
-class Feature
